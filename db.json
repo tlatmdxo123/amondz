@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "name": "Ball ear-cuff 볼 이어커프",
+      "price": 59000,
+      "likes": 2420,
+      "images": [
+        "/images/PSI_186162.jpeg",
+        "/images/PSI_186162(1).jpeg",
+        "/images/PSI_186162(2).jpeg",
+        "/images/PSI_186162(3).jpeg",
+        "/images/PSI_186162(4).jpeg"
+      ]
+    },
+    {
+      "id": "G0nABOEV2o0hB8QRh9v6u",
+      "name": "sdf",
+      "likes": 0,
+      "price": 2000,
+      "images": [
+        "/images/files-1645777391914-PSI_186162 (1).jpeg",
+        "/images/files-1645777391919-PSI_186162 (2).jpeg",
+        "/images/files-1645777391923-PSI_186162 (3).jpeg",
+        "/images/files-1645777391925-PSI_186162 (4).jpeg"
+      ]
+    }
+  ]
+}
