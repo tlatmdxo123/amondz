@@ -6,6 +6,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import multer from "multer";
 import { nanoid } from "nanoid";
+import fs from "fs";
 
 const adapter = new FileSync<{ products: Product[] }>("db.json");
 const db = low(adapter);
@@ -61,13 +62,29 @@ app.post("/products/new", upload.array("files", 5), (req, res) => {
 
 app.post("/products/:id", upload.array("files", 5), (req, res) => {
   const { id } = req.params;
+  const prev = db.get("products").find({ id }).value();
+  prev.images.forEach((image) => {
+    const path = __dirname + image;
+    if (fs.existsSync(path) && !req.body.prev?.includes(image))
+      fs.unlinkSync(path);
+  });
   const newProduct = getProductFromReq(req, id);
   db.get("products").find({ id }).assign(newProduct).write();
+  res.json(newProduct);
 });
 
 app.delete("/products/:id", (req, res) => {
   const { id } = req.params;
+  const product = db.get("products").find({ id }).value();
+
+  if (!product) res.json({ error: "해당 상품이 존재하지 않습니다" });
+
+  product.images.forEach((image) => {
+    const path = __dirname + image;
+    if (fs.existsSync(path)) fs.unlinkSync(path);
+  });
   db.get("products").remove({ id }).write();
+  res.json({ success: true });
 });
 
 app.listen(port, () => {
@@ -75,15 +92,17 @@ app.listen(port, () => {
 });
 
 function getProductFromReq(req: Request, id = nanoid()) {
-  const { price, name, likes } = req.body;
+  const { price, name, likes, prev = [] } = req.body;
+  const files = req.files ? (req.files as Express.Multer.File[]) : [];
+  const images = files
+    .map((file) => file.path.replace("server", ""))
+    .concat(prev);
   const newProduct: Product = {
     id,
     name,
     likes: +likes,
     price: +price,
-    images: (req.files as Express.Multer.File[]).map((file) =>
-      file.path.replace("server", "")
-    ),
+    images,
   };
   return newProduct;
 }
