@@ -2,7 +2,7 @@
 
 ## scripts
 
-`yarn` : install dependencies
+`yarn` : install dependencies  
 `yarn dev`: start server & application
 
 ## 주요 기능
