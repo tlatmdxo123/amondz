@@ -1,31 +1,17 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { SERVER_URL } from "../constants";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { selectProduct, removeProduct } from "../store/Products";
 import { MdFavoriteBorder } from "react-icons/md";
-import styled, { ThemeContext } from "styled-components";
+import styled from "styled-components";
 import { PreviewContainer } from "../shared/Preview";
+import { useDetailContexts } from "./contexts";
 
 function ProductDetail() {
-  const { id = "" } = useParams<{ id: string }>();
-  const product = useAppSelector(selectProduct(id));
-  const [currentImage, setCurrentImage] = useState<string>(
-    product ? product.images[0] : ""
-  );
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const theme = useContext(ThemeContext);
+  const { id, product, currentImage, setCurrentImage, theme, onClickDelete } =
+    useDetailContexts();
 
   if (!product) return <div>404 Page</div>;
-  const { name, price, likes, images } = product;
-
-  function onClickDelete() {
-    dispatch(removeProduct(id));
-    navigate("/");
-  }
-
+  const { name, images, price, likes } = product;
   return (
     <Container>
       <Buttons>

@@ -1,45 +1,25 @@
-import { IMAGE_MAX, SERVER_URL } from "../constants";
-import { Preview } from "../shared/Preview";
+import { SERVER_URL } from "../../constants";
+import { Preview } from "../../shared/Preview";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import styled from "styled-components";
 
 type Props = {
   uploads: File[];
-  setUploads: React.Dispatch<React.SetStateAction<File[]>>;
   images: string[];
-  setImages: React.Dispatch<React.SetStateAction<string[]>>;
+  uploadsNum: number;
+  onRemoveImages: (url: string) => void;
+  onRemoveUploads: (file: File) => void;
+  onAddImages: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const ImageInput = ({
   uploads,
-  setUploads,
   images,
-  setImages,
+  onRemoveImages,
+  onRemoveUploads,
+  onAddImages,
+  uploadsNum,
 }: Props) => {
-  function onAddImages(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
-    if (!files) return;
-    const empty = IMAGE_MAX - images.length - uploads.length;
-    const length = files.length < empty ? files.length : empty;
-
-    for (let i = 0; i < length; i++) {
-      !uploads.includes(files[i]) &&
-        setUploads((uploads) => uploads.concat(files[i]));
-    }
-  }
-
-  function onRemoveImages(url: string) {
-    const filtered = images.filter((image) => image !== url);
-    setImages(filtered);
-  }
-
-  function onRemoveUploads(file: File) {
-    setUploads((uploads) =>
-      uploads.filter((upload) => upload.name !== file.name)
-    );
-  }
-
-  const uploadsNum = images.length + uploads.length;
   return (
     <Container>
       <PreviewList>
